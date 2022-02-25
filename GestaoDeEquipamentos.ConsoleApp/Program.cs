@@ -68,6 +68,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
                                 case 4:
                                     {
                                         Console.WriteLine("Excluir");
+                                        ExcluirEquipamentos(nomeDoEquipamento, precoDoEquipamento, numeroDeSerieDoEquipamento,  dataDeFabricacaoDoEquipamento, fabricanteDoEquipamento, ref registros, idDosEquipamentos, equipamentoAtreladoAoChamado);
                                         break;
                                     }
                             }
@@ -107,6 +108,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
                                 case 4:
                                     {
                                         Console.WriteLine("Excluir");
+                                        ExcluirChamado(tituloDoChamado, descricaoDoChamado, dataAberturaChamado, equipamentoAtreladoAoChamado, nomeDoEquipamento, ref registrosChamado, ref registros, idDosEquipamentos, numeroDeSerieDoEquipamento, fabricanteDoEquipamento, idDosChamados);
                                         break;
                                     }
                             }
@@ -124,6 +126,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
             } // Fecha while
         } // Fecha main
         #region Métodos - Geral
+
         #region Métodos dos equipamentos
         static void RegistrarEquipamentos(string[] nomeDoEquipamento, decimal[] precoDoEquipamento, string[] numeroDeSerieDoEquipamento, string[] dataDeFabricacaoDoEquipamento, string[] fabricanteDoEquipamento, ref int registros, int[] idDosEquipamentos) 
         {
@@ -243,6 +246,60 @@ namespace GestaoDeEquipamentos.ConsoleApp
                 goto ERRODOISEDITAR;
             }
         }
+        static void VisualizarParaExcluir(string[] nomeDoEquipamento, decimal[] precoDoEquipamento, string[] numeroDeSerieDoEquipamento, string[] dataDeFabricacaoDoEquipamento, string[] fabricanteDoEquipamento, ref int registros, int[] idDosEquipamentos, string[] equipamentoAtreladoAoChamado)
+        {
+            for (int i = 0; i < registros; i++)
+            {
+                if (nomeDoEquipamento[i] != "")
+                {
+                    Console.WriteLine("ID do equipamento: " + idDosEquipamentos[i]);
+                    Console.Write("Nome do equipamento: ");
+                    Console.WriteLine(nomeDoEquipamento[i]);
+                    Console.Write("Preço de compra: ");
+                    Console.WriteLine(precoDoEquipamento[i]);
+                    Console.Write("Nº de série: ");
+                    Console.WriteLine(numeroDeSerieDoEquipamento[i]);
+                    Console.Write("Fabricação:");
+                    Console.WriteLine(dataDeFabricacaoDoEquipamento[i]);
+                    Console.Write("ID (Não editável): ");
+                    Console.WriteLine(idDosEquipamentos[i]);
+                    Console.WriteLine();
+                }
+            }
+        }
+        static void ExcluirEquipamentos(string[] nomeDoEquipamento, decimal[] precoDoEquipamento, string[] numeroDeSerieDoEquipamento, string[] dataDeFabricacaoDoEquipamento, string[] fabricanteDoEquipamento, ref int registros, int[] idDosEquipamentos, string[] equipamentoAtreladoAoChamado)
+        {
+            if(registros == 0)
+            {
+                Console.WriteLine("Sem equipamentos registrados. É necessário haver algum para poder excluir. Reinicie e inclua equipamentos!");
+            }
+            else 
+            { 
+                Console.WriteLine("Equipamentos registrados: ");
+                VisualizarParaExcluir(nomeDoEquipamento, precoDoEquipamento, numeroDeSerieDoEquipamento, dataDeFabricacaoDoEquipamento, fabricanteDoEquipamento, ref registros, idDosEquipamentos, equipamentoAtreladoAoChamado);
+                Console.Write("Escolha através do número do 'ID' do chamado para selecioná-lo para excluir: ");
+                int idParaExcluir = int.Parse(Console.ReadLine());
+                if(nomeDoEquipamento[idParaExcluir] == equipamentoAtreladoAoChamado[idParaExcluir])
+                {
+                    Console.WriteLine("Desculpe! Não posso excluir esse equipamento pois ele está atrelado a um chamado.");
+                } 
+                else
+                {
+                    for (int i = idParaExcluir; i < registros; i++)
+                    {
+                        nomeDoEquipamento[idParaExcluir] = nomeDoEquipamento[idParaExcluir + 1];
+                        precoDoEquipamento[idParaExcluir] = precoDoEquipamento[idParaExcluir + 1];
+                        numeroDeSerieDoEquipamento[idParaExcluir] = numeroDeSerieDoEquipamento[idParaExcluir + 1];
+                        dataDeFabricacaoDoEquipamento[idParaExcluir] = numeroDeSerieDoEquipamento[idParaExcluir + 1];
+                        fabricanteDoEquipamento[idParaExcluir] = fabricanteDoEquipamento[idParaExcluir + 1];
+                    }
+                    registros -= 1;
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine("Chamado excluído com sucesso!");
+                    Console.ResetColor();
+                }
+            }
+        }
         #endregion
 
 
@@ -259,8 +316,8 @@ namespace GestaoDeEquipamentos.ConsoleApp
                 Console.WriteLine("Estes são os equipamentos disponíveis:");
                 VisualizarEquipamentos(nomeDoEquipamento, numeroDeSerieDoEquipamento, fabricanteDoEquipamento, registros, idDosEquipamentos);
                 Console.WriteLine("Informe o número 'ID' do equipamento que deseja abrir chamado: ");
-                int equipamentoEscolhido = int.Parse(Console.ReadLine());
-                equipamentoAtreladoAoChamado[registrosChamado] = nomeDoEquipamento[equipamentoEscolhido]; // Registro X terá equipamento (id) Y atrelado à si
+                int idEscolhido = int.Parse(Console.ReadLine());
+                equipamentoAtreladoAoChamado[registrosChamado] = nomeDoEquipamento[idEscolhido]; // Registro X terá equipamento (id) Y atrelado à si
 
                 Console.Write("Digite o título do chamado (Resumo do problema): ");
                 tituloDoChamado[registrosChamado] = Console.ReadLine();
@@ -300,13 +357,13 @@ namespace GestaoDeEquipamentos.ConsoleApp
                 }
             }
         }
-        static void VisualizarParaEditar(string[] tituloDoChamado, string[] descricaoDoChamado, string[] equipamentoAtreladoAoChamado, string[] dataAberturaChamado, ref int registrosChamado, int[] idDosChamados)
+        static void VisualizarParaEditarOuExcluir(string[] tituloDoChamado, string[] descricaoDoChamado, string[] equipamentoAtreladoAoChamado, string[] dataAberturaChamado, ref int registrosChamado, int[] idDosChamados)
         {
             for (int i = 0; i < registrosChamado; i++)
             {
                 if (tituloDoChamado[i] != "")
                 {
-                    Console.Write("ID do chamado: " + idDosChamados[i]);
+                    Console.WriteLine("ID do chamado: " + idDosChamados[i]);
                     Console.Write("Título do chamado: ");
                     Console.WriteLine(tituloDoChamado[i]);
                     Console.Write("Descrição do chamado: ");
@@ -324,7 +381,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
         static void EditarChamados(string[] tituloDoChamado, string[] descricaoDoChamado, string[] dataAberturaChamado, string[] equipamentoAtreladoAoChamado, string[] nomeDoEquipamento, int[] diasEmAberto, ref int registrosChamado, ref int registros, int[] idDosEquipamentos, string[] numeroDeSerieDoEquipamento, string[] fabricanteDoEquipamento, int[] idDosChamados)
         {
             Console.WriteLine("Chamados em aberto: ");
-            VisualizarParaEditar(tituloDoChamado, descricaoDoChamado, equipamentoAtreladoAoChamado, dataAberturaChamado, ref registrosChamado, idDosChamados);
+            VisualizarParaEditarOuExcluir(tituloDoChamado, descricaoDoChamado, equipamentoAtreladoAoChamado, dataAberturaChamado, ref registrosChamado, idDosChamados);
             Console.Write("Escolha através do número do 'ID' do chamado para selecioná-lo para editar: ");
             int idChamadorParaEditar = int.Parse(Console.ReadLine());
             ERROTRESEDITAR:
@@ -354,6 +411,31 @@ namespace GestaoDeEquipamentos.ConsoleApp
             {
                 Console.WriteLine("Opção inválida, tente novamente!");
                 goto ERROTRESEDITAR;
+            }
+        }
+        static void ExcluirChamado(string[] tituloDoChamado, string[] descricaoDoChamado, string[] dataAberturaChamado, string[] equipamentoAtreladoAoChamado, string[] nomeDoEquipamento, ref int registrosChamado, ref int registros, int[] idDosEquipamentos, string[] numeroDeSerieDoEquipamento, string[] fabricanteDoEquipamento, int[] idDosChamados)
+        {
+            if(registrosChamado == 0)
+            {
+                Console.WriteLine("Sem chamados em aberto. É necessário haver um para excluir. Reinicie e crie chamados!");
+            } 
+            else 
+            { 
+                Console.WriteLine("Chamados em aberto: ");
+                VisualizarParaEditarOuExcluir(tituloDoChamado, descricaoDoChamado, equipamentoAtreladoAoChamado, dataAberturaChamado, ref registrosChamado, idDosChamados);
+                Console.Write("Escolha através do número do 'ID' do chamado para selecioná-lo para excluir: ");
+                int idParaExcluir = int.Parse(Console.ReadLine());
+                for (int i = idParaExcluir; i < registrosChamado; i++)
+                {
+                    tituloDoChamado[idParaExcluir] = tituloDoChamado[idParaExcluir + 1];
+                    descricaoDoChamado[idParaExcluir] = descricaoDoChamado[idParaExcluir + 1];
+                    dataAberturaChamado[idParaExcluir] = descricaoDoChamado[idParaExcluir + 1];
+                    equipamentoAtreladoAoChamado[idParaExcluir] = equipamentoAtreladoAoChamado[idParaExcluir + 1];
+                }
+                registrosChamado -= 1;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Chamado excluído com sucesso!");
+                Console.ResetColor();
             }
         }
         #endregion
