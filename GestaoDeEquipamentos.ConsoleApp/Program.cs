@@ -307,6 +307,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
             }
             static void ExcluirEquipamentos(string[] nomeDoEquipamento, decimal[] precoDoEquipamento, string[] numeroDeSerieDoEquipamento, string[] dataDeFabricacaoDoEquipamento, string[] fabricanteDoEquipamento, ref int registros, int[] idDosEquipamentos, string[] equipamentoAtreladoAoChamado)
             {
+            bool podeExcluir = true;
                 if(registros == 0)
                 {
                     Console.WriteLine("\nAinda não há equipamentos registrados! :(\n");
@@ -317,12 +318,16 @@ namespace GestaoDeEquipamentos.ConsoleApp
                     VisualizarParaExcluir(nomeDoEquipamento, precoDoEquipamento, numeroDeSerieDoEquipamento, dataDeFabricacaoDoEquipamento, fabricanteDoEquipamento, ref registros, idDosEquipamentos, equipamentoAtreladoAoChamado);
                     Console.Write("Digite o 'ID' do equipamento para excluir: ");
                     int idParaExcluir = int.Parse(Console.ReadLine());
-                    if(nomeDoEquipamento[idParaExcluir] == equipamentoAtreladoAoChamado[idParaExcluir])
+                    for (int i = 0; i < registros; i++)
                     {
-                        Console.WriteLine("Desculpe! Não posso excluir esse equipamento pois ele está atrelado a um chamado.");
-                    } 
-                    else
-                    {
+                        if(equipamentoAtreladoAoChamado[i] == nomeDoEquipamento[idParaExcluir])
+                        {
+                            Console.WriteLine();
+                            MensagemInformativa("Desculpe! Não posso excluir esse equipamento pois ele está atrelado a um chamado", ConsoleColor.DarkRed);
+                            podeExcluir = false;
+                        }
+                    }
+                    if(podeExcluir == true) { 
                         for (int i = idParaExcluir; i < registros; i++)
                         {
                             nomeDoEquipamento[i] = nomeDoEquipamento[i + 1];
