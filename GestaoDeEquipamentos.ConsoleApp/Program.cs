@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * Por fazer:
+ * Não ser possível excluir um solicitante se esse estiver atrelado a um chamado
+ * Não poder criar um chamado se não houver equipamento && solicitante registrados
+ * Requisitos 2.4 e 3.1
+ */
+using System;
 
 namespace GestaoDeEquipamentos.ConsoleApp
 {
@@ -106,21 +112,22 @@ namespace GestaoDeEquipamentos.ConsoleApp
                                     {
                                         Console.Clear();
                                         Console.WriteLine("Menu > Chamados > Registrar:\n");
-                                        RegistrarChamados(tituloDoChamado, descricaoDoChamado, dataAberturaChamado, equipamentoAtreladoAoChamado, nomeDoEquipamento, diasEmAberto, ref registrosChamado, ref registros, idDosEquipamentos, numeroDeSerieDoEquipamento, fabricanteDoEquipamento, idDosChamados);
+                                        RegistrarChamados(tituloDoChamado, descricaoDoChamado, dataAberturaChamado, equipamentoAtreladoAoChamado, nomeDoEquipamento, diasEmAberto, ref registrosChamado, ref registros, idDosEquipamentos, numeroDeSerieDoEquipamento, fabricanteDoEquipamento, idDosChamados, nomeDoSolicitante, emailDoSolicitante, telefoneDoSolicitante, solicitanteAtreladoAoChamado, idDosSolicitantes, ref solicitantes);
                                         break;
                                     }
                                 case 2:
                                     {
                                         Console.Clear();
                                         Console.WriteLine("Menu > Chamados > Visualizar:\n");
-                                        VisualizarChamados(tituloDoChamado, dataAberturaChamado, equipamentoAtreladoAoChamado, registrosChamado, idDosChamados);
+                                        VisualizarChamados(tituloDoChamado, dataAberturaChamado, equipamentoAtreladoAoChamado, registrosChamado, idDosChamados, solicitanteAtreladoAoChamado);
                                         break;
                                     }
                                 case 3:
                                     {
                                         Console.Clear();
                                         Console.WriteLine("Menu > Chamados > Editar:\n");
-                                        EditarChamados(tituloDoChamado, descricaoDoChamado, dataAberturaChamado, equipamentoAtreladoAoChamado, nomeDoEquipamento, diasEmAberto, ref registrosChamado, ref registros, idDosEquipamentos, numeroDeSerieDoEquipamento, fabricanteDoEquipamento, idDosChamados);
+                                        EditarChamados(tituloDoChamado, descricaoDoChamado, dataAberturaChamado, equipamentoAtreladoAoChamado, nomeDoEquipamento, diasEmAberto, ref registrosChamado, ref registros, idDosEquipamentos, numeroDeSerieDoEquipamento, fabricanteDoEquipamento, idDosChamados, solicitanteAtreladoAoChamado, nomeDoSolicitante, emailDoSolicitante, telefoneDoSolicitante, idDosSolicitantes, ref solicitantes
+);
 
                                         break;
                                     }
@@ -128,7 +135,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
                                     {
                                         Console.Clear();
                                         Console.WriteLine("Menu > Chamados > Excluir:\n");
-                                        ExcluirChamado(tituloDoChamado, descricaoDoChamado, dataAberturaChamado, equipamentoAtreladoAoChamado, nomeDoEquipamento, ref registrosChamado, ref registros, idDosEquipamentos, numeroDeSerieDoEquipamento, fabricanteDoEquipamento, idDosChamados);
+                                        ExcluirChamado(tituloDoChamado, descricaoDoChamado, dataAberturaChamado, equipamentoAtreladoAoChamado, nomeDoEquipamento, ref registrosChamado, ref registros, idDosEquipamentos, numeroDeSerieDoEquipamento, fabricanteDoEquipamento, idDosChamados, solicitanteAtreladoAoChamado);
                                         break;
                                     }
                                 case 5:
@@ -418,7 +425,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
         #endregion
 
         #region Métodos dos chamados
-        static void RegistrarChamados(string[] tituloDoChamado, string[] descricaoDoChamado, string[] dataAberturaChamado, string[] equipamentoAtreladoAoChamado, string[] nomeDoEquipamento, int[] diasEmAberto, ref int registrosChamado, ref int registros, int[] idDosEquipamentos, string[] numeroDeSerieDoEquipamento, string[] fabricanteDoEquipamento, int[] idDosChamados)
+        static void RegistrarChamados(string[] tituloDoChamado, string[] descricaoDoChamado, string[] dataAberturaChamado, string[] equipamentoAtreladoAoChamado, string[] nomeDoEquipamento, int[] diasEmAberto, ref int registrosChamado, ref int registros, int[] idDosEquipamentos, string[] numeroDeSerieDoEquipamento, string[] fabricanteDoEquipamento, int[] idDosChamados, string[] nomeDoSolicitante, string[] emailDoSolicitante, string[] telefoneDoSolicitante, string[] solicitanteAtreladoAoChamado, int[] idDosSolicitantes, ref int solicitantes)
         {
             if (registros == 0)
             {
@@ -441,12 +448,18 @@ namespace GestaoDeEquipamentos.ConsoleApp
                 Console.Write("Insira a data (dia/mês/ano) de criação do chamado: ");
                 dataAberturaChamado[registrosChamado] = Console.ReadLine();
                 idDosChamados[registrosChamado] = registrosChamado;
+                Console.Write("Veja os solicitantes disponíveis: \n");
+                VisualizarSolicitantes(nomeDoSolicitante, emailDoSolicitante, telefoneDoSolicitante, solicitanteAtreladoAoChamado, idDosSolicitantes, ref solicitantes);
+                Console.Write("E através do ID, indique o solicitante atrelado ao chamado: ");
+                int idSolicitanteEscolhido = int.Parse(Console.ReadLine());
+                solicitanteAtreladoAoChamado[registrosChamado] = nomeDoSolicitante[idSolicitanteEscolhido];
+                Console.ReadKey();
                 registrosChamado += 1; // Registro criado
                 Console.Clear();
             }
 
         }
-        static void VisualizarChamados(string[] tituloDoChamado, string[] dataAberturaChamado, string[] equipamentoAtreladoAoChamado, int registrosChamado, int[] idDosChamados)
+        static void VisualizarChamados(string[] tituloDoChamado, string[] dataAberturaChamado, string[] equipamentoAtreladoAoChamado, int registrosChamado, int[] idDosChamados, string[] solicitanteAtreladoAoChamado)
         {
             if (registrosChamado == 0)
             {
@@ -458,11 +471,13 @@ namespace GestaoDeEquipamentos.ConsoleApp
                 {
                     if (tituloDoChamado[i] != "") // Se estiver com algo, existe um chamado nessa posição, caso contrário, não
                     {
-                        Console.WriteLine("ID do chamado.......: " + idDosChamados[i]);
-                        Console.Write("Título do chamado...: ");
-                        Console.WriteLine(tituloDoChamado[i]);
+                        Console.WriteLine("\nID do chamado.......: " + idDosChamados[i]);
+                        Console.Write("Solicitante.........: ");
+                        Console.WriteLine(solicitanteAtreladoAoChamado[i]);
                         Console.Write("Equipamento atrelado: ");
                         Console.WriteLine(equipamentoAtreladoAoChamado[i]);
+                        Console.Write("Título do chamado...: ");
+                        Console.WriteLine(tituloDoChamado[i]);
                         Console.Write("Data de abertura....: ");
                         Console.WriteLine(dataAberturaChamado[i]);
                         DateTime hoje = DateTime.Now;
@@ -480,26 +495,29 @@ namespace GestaoDeEquipamentos.ConsoleApp
                 }
             }
         }
-        static void VisualizarParaEditarOuExcluir(string[] tituloDoChamado, string[] descricaoDoChamado, string[] equipamentoAtreladoAoChamado, string[] dataAberturaChamado, ref int registrosChamado, int[] idDosChamados)
+        static void VisualizarParaEditarOuExcluir(string[] tituloDoChamado, string[] descricaoDoChamado, string[] equipamentoAtreladoAoChamado, string[] dataAberturaChamado, ref int registrosChamado, int[] idDosChamados, string[] solicitanteAtreladoAoChamado)
         {
             for (int i = 0; i < registrosChamado; i++)
             {
                 if (tituloDoChamado[i] != "")
                 {
                     Console.WriteLine("ID do chamado.......: " + idDosChamados[i]);
+                    Console.Write("Solicitante.........: ");
+                    Console.WriteLine(solicitanteAtreladoAoChamado[i]);
+                    Console.Write("Equipamento atrelado: ");
+                    Console.WriteLine(equipamentoAtreladoAoChamado[i]);
                     Console.Write("Título do chamado...: ");
                     Console.WriteLine(tituloDoChamado[i]);
                     Console.Write("Descrição do chamado: ");
                     Console.WriteLine(descricaoDoChamado[i]);
-                    Console.Write("Equipamento atrelado: ");
-                    Console.WriteLine(equipamentoAtreladoAoChamado[i]);
                     Console.Write("Data de abertura....: ");
                     Console.WriteLine(dataAberturaChamado[i]);
                     Console.WriteLine();
                 }
             }
         }
-        static void EditarChamados(string[] tituloDoChamado, string[] descricaoDoChamado, string[] dataAberturaChamado, string[] equipamentoAtreladoAoChamado, string[] nomeDoEquipamento, int[] diasEmAberto, ref int registrosChamado, ref int registros, int[] idDosEquipamentos, string[] numeroDeSerieDoEquipamento, string[] fabricanteDoEquipamento, int[] idDosChamados)
+        static void EditarChamados(string[] tituloDoChamado, string[] descricaoDoChamado, string[] dataAberturaChamado, string[] equipamentoAtreladoAoChamado, string[] nomeDoEquipamento, int[] diasEmAberto, ref int registrosChamado, ref int registros, int[] idDosEquipamentos, string[] numeroDeSerieDoEquipamento, string[] fabricanteDoEquipamento, int[] idDosChamados, string[] solicitanteAtreladoAoChamado, string[] nomeDoSolicitante, string[] emailDoSolicitante, string[] telefoneDoSolicitante, int[] idDosSolicitantes, ref int solicitantes
+)
         {
             if (registrosChamado == 0)
             {
@@ -508,12 +526,12 @@ namespace GestaoDeEquipamentos.ConsoleApp
             else
             {
                 Console.WriteLine("Chamados em aberto: \n");
-                VisualizarParaEditarOuExcluir(tituloDoChamado, descricaoDoChamado, equipamentoAtreladoAoChamado, dataAberturaChamado, ref registrosChamado, idDosChamados);
+                VisualizarParaEditarOuExcluir(tituloDoChamado, descricaoDoChamado, equipamentoAtreladoAoChamado, dataAberturaChamado, ref registrosChamado, idDosChamados, solicitanteAtreladoAoChamado);
                 Console.Write("Escolha através do número do 'ID' do chamado para selecioná-lo para editar: ");
                 int idChamadorParaEditar = int.Parse(Console.ReadLine());
             ERROTRESEDITAR:
                 Console.WriteLine("Editar no 'ID' " + idChamadorParaEditar + ":\n" +
-                    "1. Título | 2. Descrição | 3. Equipamento atrelado | 4. Data de abertura");
+                    "1. Título | 2. Descrição | 3. Equipamento atrelado | 4. Data de abertura | 5. Solicitante");
                 int escolha = int.Parse(Console.ReadLine());
                 if (escolha == 1)
                 {
@@ -538,6 +556,14 @@ namespace GestaoDeEquipamentos.ConsoleApp
                     Console.Write("Escolha uma nova data (dia/mês/ano) de abertura: ");
                     dataAberturaChamado[idChamadorParaEditar] = Console.ReadLine();
                 }
+                else if (escolha == 5)
+                {
+                    Console.Write("Estes são os solicitantes disponíveis: \n");
+                    VisualizarSolicitantes(nomeDoSolicitante, emailDoSolicitante, telefoneDoSolicitante, solicitanteAtreladoAoChamado, idDosSolicitantes, ref solicitantes);
+                    Console.Write("Através do 'ID', escolha qual solicitante gostaria de atrelar à esse chamado: ");
+                    int solicitanteEscolhido = int.Parse(Console.ReadLine());
+                    solicitanteAtreladoAoChamado[idChamadorParaEditar] = nomeDoSolicitante[solicitanteEscolhido];
+                }
                 else
                 {
                     Console.WriteLine("Opção inválida, tente novamente!");
@@ -547,7 +573,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
                 MensagemInformativa("Chamado atualizado com sucesso!", ConsoleColor.Cyan);
             }
         }
-        static void ExcluirChamado(string[] tituloDoChamado, string[] descricaoDoChamado, string[] dataAberturaChamado, string[] equipamentoAtreladoAoChamado, string[] nomeDoEquipamento, ref int registrosChamado, ref int registros, int[] idDosEquipamentos, string[] numeroDeSerieDoEquipamento, string[] fabricanteDoEquipamento, int[] idDosChamados)
+        static void ExcluirChamado(string[] tituloDoChamado, string[] descricaoDoChamado, string[] dataAberturaChamado, string[] equipamentoAtreladoAoChamado, string[] nomeDoEquipamento, ref int registrosChamado, ref int registros, int[] idDosEquipamentos, string[] numeroDeSerieDoEquipamento, string[] fabricanteDoEquipamento, int[] idDosChamados, string[] solicitanteAtreladoAoChamado)
         {
             if (registrosChamado == 0)
             {
@@ -556,7 +582,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
             else
             {
                 Console.WriteLine("Chamados em aberto: ");
-                VisualizarParaEditarOuExcluir(tituloDoChamado, descricaoDoChamado, equipamentoAtreladoAoChamado, dataAberturaChamado, ref registrosChamado, idDosChamados);
+                VisualizarParaEditarOuExcluir(tituloDoChamado, descricaoDoChamado, equipamentoAtreladoAoChamado, dataAberturaChamado, ref registrosChamado, idDosChamados, solicitanteAtreladoAoChamado);
                 Console.Write("Escolha através do número do 'ID' do chamado para selecioná-lo para excluir: ");
                 int idParaExcluir = int.Parse(Console.ReadLine());
                 for (int i = idParaExcluir; i < registrosChamado; i++)
