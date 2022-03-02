@@ -83,6 +83,9 @@ namespace GestaoDeEquipamentos.ConsoleApp
                                             Console.Clear();
                                             break;
                                         }
+                                    default:
+                                        Console.WriteLine("Opção inválida!");
+                                        break;
                                 }
                                 break;
                             }
@@ -131,6 +134,9 @@ namespace GestaoDeEquipamentos.ConsoleApp
                                             break;
                                         
                                         }
+                                    default:
+                                        Console.WriteLine("Opção inválida!");
+                                        break;
                                 }
                                 break;
                             }
