@@ -75,7 +75,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
                                         {
                                             Console.Clear();
                                             Console.WriteLine("Menu > Equipamentos > Excluir:\n");
-                                            ExcluirEquipamentos(nomeDoEquipamento, precoDoEquipamento, numeroDeSerieDoEquipamento, dataDeFabricacaoDoEquipamento, fabricanteDoEquipamento, ref registros, idDosEquipamentos, equipamentoAtreladoAoChamado);
+                                            ExcluirEquipamentos(nomeDoEquipamento, precoDoEquipamento, numeroDeSerieDoEquipamento, dataDeFabricacaoDoEquipamento, fabricanteDoEquipamento, ref registros, idDosEquipamentos, equipamentoAtreladoAoChamado, ref registrosChamado);
                                             break;
                                         }
                                     case 5:
@@ -305,8 +305,9 @@ namespace GestaoDeEquipamentos.ConsoleApp
                     }
                 }
             }
-            static void ExcluirEquipamentos(string[] nomeDoEquipamento, decimal[] precoDoEquipamento, string[] numeroDeSerieDoEquipamento, string[] dataDeFabricacaoDoEquipamento, string[] fabricanteDoEquipamento, ref int registros, int[] idDosEquipamentos, string[] equipamentoAtreladoAoChamado)
+            static void ExcluirEquipamentos(string[] nomeDoEquipamento, decimal[] precoDoEquipamento, string[] numeroDeSerieDoEquipamento, string[] dataDeFabricacaoDoEquipamento, string[] fabricanteDoEquipamento, ref int registros, int[] idDosEquipamentos, string[] equipamentoAtreladoAoChamado, ref int registrosChamado)
             {
+            int quantiaDeGiros = 0;
             bool podeExcluir = true;
                 if(registros == 0)
                 {
@@ -318,14 +319,25 @@ namespace GestaoDeEquipamentos.ConsoleApp
                     VisualizarParaExcluir(nomeDoEquipamento, precoDoEquipamento, numeroDeSerieDoEquipamento, dataDeFabricacaoDoEquipamento, fabricanteDoEquipamento, ref registros, idDosEquipamentos, equipamentoAtreladoAoChamado);
                     Console.Write("Digite o 'ID' do equipamento para excluir: ");
                     int idParaExcluir = int.Parse(Console.ReadLine());
-                    for (int i = 0; i < registros; i++)
+                    Console.WriteLine();
+                    if(registros > registrosChamado)
+                    {
+                        quantiaDeGiros = registros;
+                    } else
+                    {
+                        quantiaDeGiros = registrosChamado;
+                    }
+                    for (int i = 0; i < quantiaDeGiros; i++)
                     {
                         if(equipamentoAtreladoAoChamado[i] == nomeDoEquipamento[idParaExcluir])
                         {
-                            Console.WriteLine();
-                            MensagemInformativa("Desculpe! Não posso excluir esse equipamento pois ele está atrelado a um chamado", ConsoleColor.DarkRed);
                             podeExcluir = false;
                         }
+                    }
+                    if(podeExcluir == false)
+                    {
+                        Console.WriteLine();
+                        MensagemInformativa("Desculpe! Não posso excluir esse equipamento pois ele está atrelado a um chamado", ConsoleColor.DarkRed);
                     }
                     if(podeExcluir == true) { 
                         for (int i = idParaExcluir; i < registros; i++)
