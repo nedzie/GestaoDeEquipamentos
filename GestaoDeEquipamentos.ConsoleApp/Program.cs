@@ -142,6 +142,9 @@ namespace GestaoDeEquipamentos.ConsoleApp
                                 menu = false;
                                 break;
                             }
+                    default:
+                        Console.WriteLine("Opção inválida!");
+                        break;
                     }
             }
         }
@@ -322,11 +325,11 @@ namespace GestaoDeEquipamentos.ConsoleApp
                     {
                         for (int i = idParaExcluir; i < registros; i++)
                         {
-                            nomeDoEquipamento[idParaExcluir] = nomeDoEquipamento[idParaExcluir + 1];
-                            precoDoEquipamento[idParaExcluir] = precoDoEquipamento[idParaExcluir + 1];
-                            numeroDeSerieDoEquipamento[idParaExcluir] = numeroDeSerieDoEquipamento[idParaExcluir + 1];
-                            dataDeFabricacaoDoEquipamento[idParaExcluir] = numeroDeSerieDoEquipamento[idParaExcluir + 1];
-                            fabricanteDoEquipamento[idParaExcluir] = fabricanteDoEquipamento[idParaExcluir + 1];
+                            nomeDoEquipamento[i] = nomeDoEquipamento[i + 1];
+                            precoDoEquipamento[i] = precoDoEquipamento[i + 1];
+                            numeroDeSerieDoEquipamento[i] = numeroDeSerieDoEquipamento[i + 1];
+                            dataDeFabricacaoDoEquipamento[i] = numeroDeSerieDoEquipamento[i + 1];
+                            fabricanteDoEquipamento[i] = fabricanteDoEquipamento[i + 1];
                         }
                         registros -= 1;
                         Console.Clear();
@@ -478,10 +481,10 @@ namespace GestaoDeEquipamentos.ConsoleApp
                     int idParaExcluir = int.Parse(Console.ReadLine());
                     for (int i = idParaExcluir; i < registrosChamado; i++)
                     {
-                        tituloDoChamado[idParaExcluir] = tituloDoChamado[idParaExcluir + 1];
-                        descricaoDoChamado[idParaExcluir] = descricaoDoChamado[idParaExcluir + 1];
-                        dataAberturaChamado[idParaExcluir] = descricaoDoChamado[idParaExcluir + 1];
-                        equipamentoAtreladoAoChamado[idParaExcluir] = equipamentoAtreladoAoChamado[idParaExcluir + 1];
+                        tituloDoChamado[i] = tituloDoChamado[i + 1];
+                        descricaoDoChamado[i] = descricaoDoChamado[i + 1];
+                        dataAberturaChamado[i] = descricaoDoChamado[i + 1];
+                        equipamentoAtreladoAoChamado[i] = equipamentoAtreladoAoChamado[i + 1];
                     }
                     registrosChamado -= 1;
                     Console.Clear();
