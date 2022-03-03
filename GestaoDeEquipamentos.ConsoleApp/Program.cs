@@ -1,7 +1,5 @@
 ﻿/*
  * Por fazer:
- * Não ser possível excluir um solicitante se esse estiver atrelado a um chamado
- * Não poder criar um chamado se não houver equipamento && solicitante registrados
  * Requisitos 2.4 e 3.1
  */
 using System;
@@ -184,7 +182,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
                                     {
                                         Console.Clear();
                                         Console.WriteLine("Menu > Solicitantes > Excluir:\n");
-                                        ExcluirSolicitante(nomeDoSolicitante, emailDoSolicitante, telefoneDoSolicitante, solicitanteAtreladoAoChamado, idDosSolicitantes, ref solicitantes);
+                                        ExcluirSolicitante(nomeDoSolicitante, emailDoSolicitante, telefoneDoSolicitante, solicitanteAtreladoAoChamado, idDosSolicitantes, ref solicitantes, ref registros);
                                         break;
                                     }
                                 case 5:
@@ -373,7 +371,6 @@ namespace GestaoDeEquipamentos.ConsoleApp
         }
         static void ExcluirEquipamentos(string[] nomeDoEquipamento, decimal[] precoDoEquipamento, string[] numeroDeSerieDoEquipamento, string[] dataDeFabricacaoDoEquipamento, string[] fabricanteDoEquipamento, ref int registros, int[] idDosEquipamentos, string[] equipamentoAtreladoAoChamado, ref int registrosChamado)
         {
-            int quantiaDeGiros = 0;
             bool podeExcluir = true;
             if (registros == 0)
             {
@@ -386,6 +383,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
                 Console.Write("Digite o 'ID' do equipamento para excluir: ");
                 int idParaExcluir = int.Parse(Console.ReadLine());
                 Console.WriteLine();
+                int quantiaDeGiros = 0;
                 if (registros > registrosChamado)
                 {
                     quantiaDeGiros = registros;
@@ -427,9 +425,9 @@ namespace GestaoDeEquipamentos.ConsoleApp
         #region Métodos dos chamados
         static void RegistrarChamados(string[] tituloDoChamado, string[] descricaoDoChamado, string[] dataAberturaChamado, string[] equipamentoAtreladoAoChamado, string[] nomeDoEquipamento, int[] diasEmAberto, ref int registrosChamado, ref int registros, int[] idDosEquipamentos, string[] numeroDeSerieDoEquipamento, string[] fabricanteDoEquipamento, int[] idDosChamados, string[] nomeDoSolicitante, string[] emailDoSolicitante, string[] telefoneDoSolicitante, string[] solicitanteAtreladoAoChamado, int[] idDosSolicitantes, ref int solicitantes)
         {
-            if (registros == 0)
+            if (registros == 0 || solicitantes == 0)
             {
-                Console.WriteLine("É necessário cadastrar equipamentos para abrir um chamado.\nRegistre e repita este processo!\n");
+                Console.WriteLine("É necessário cadastrar equipamentos e um solicitante para abrir um chamado.\nRegistre e repita este processo!\n");
             }
             else
             {
@@ -702,39 +700,52 @@ namespace GestaoDeEquipamentos.ConsoleApp
                 MensagemInformativa("Solicitante atualizado com sucesso!", ConsoleColor.Cyan);
             }
         }
-        static void ExcluirSolicitante(string[] nomeDoSolicitante, string[] emailDoSolicitante, string[] telefoneDoSolicitante, string[] solicitanteAtreladoAoChamado, int[] idDosSolicitantes, ref int solicitantes)
+        static void ExcluirSolicitante(string[] nomeDoSolicitante, string[] emailDoSolicitante, string[] telefoneDoSolicitante, string[] solicitanteAtreladoAoChamado, int[] idDosSolicitantes, ref int solicitantes, ref int registros)
         {
+            bool podeExcluir = true;
             if (solicitantes == 0)
             {
                 Console.WriteLine("\nAinda não há solicitantes registrados! :(\n");
             }
             else
             {
-                for (int i = 0; i < solicitantes; i++)
-                {
-                    if (nomeDoSolicitante[i] != null)
-                    {
-                        Console.WriteLine("ID.........: " + idDosSolicitantes[i]);
-                        Console.Write("Nome.......: ");
-                        Console.WriteLine(nomeDoSolicitante[i]);
-                        Console.Write("E-mail.....: ");
-                        Console.WriteLine(emailDoSolicitante[i]);
-                        Console.Write("Telefone...: ");
-                        Console.WriteLine(telefoneDoSolicitante[i]);
-                        Console.WriteLine();
-                    }
-                }
+                Console.WriteLine("Solicitantes disponíveis: ");
+                VisualizarSolicitantes(nomeDoSolicitante, emailDoSolicitante, telefoneDoSolicitante, solicitanteAtreladoAoChamado, idDosSolicitantes, ref solicitantes);
                 Console.Write("Escolha o 'ID' do solicitante para excluir: ");
                 int idSolicitanteParaExcluir = int.Parse(Console.ReadLine());
-                for (int i = idSolicitanteParaExcluir; i < solicitantes; i++)
+                int quantiaDeGiros = 0;
+                if (registros > solicitantes)
                 {
+                    quantiaDeGiros = registros;
+                }
+                else
+                {
+                    quantiaDeGiros = solicitantes;
+                }
+                for (int i = 0; i < quantiaDeGiros; i++)
+                {
+                    if (solicitanteAtreladoAoChamado[i] == nomeDoSolicitante[idSolicitanteParaExcluir])
+                    {
+                        podeExcluir = false;
+                    }
+                }
+                if (podeExcluir == false)
+                {
+                    Console.WriteLine();
+                    MensagemInformativa("Desculpe! Não posso excluir esse solicitante pois ele está atrelado a um chamado", ConsoleColor.DarkRed);
+                }
+                if (podeExcluir == true) 
+                { 
+                    for (int i = idSolicitanteParaExcluir; i < solicitantes; i++)
+                    {
                     nomeDoSolicitante[i] = nomeDoSolicitante[i + 1];
                     emailDoSolicitante[i] = emailDoSolicitante[i + 1];
                     telefoneDoSolicitante[i] = telefoneDoSolicitante[i + 1];
-                }
-                solicitantes -= 1;
-                Console.Clear();
-                MensagemInformativa("Solicitante excluído com sucesso!", ConsoleColor.DarkRed);
+                    }
+                    solicitantes -= 1;
+                    Console.Clear();
+                    MensagemInformativa("Solicitante excluído com sucesso!", ConsoleColor.DarkRed);
+                }  
             }
         }
         #endregion
