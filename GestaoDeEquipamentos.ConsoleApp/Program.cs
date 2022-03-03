@@ -11,6 +11,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
         static void Main(string[] args)
         {
             #region Arrays para armazenamento
+
             #region Equipamentos
             string[] nomeDoEquipamento = new string[1000];
             int[] idDosEquipamentos = new int[1000];
@@ -20,6 +21,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
             string[] fabricanteDoEquipamento = new string[1000];
             int registros = 0;
             #endregion
+
             #region Chamados
             string[] tituloDoChamado = new string[1000];
             string[] descricaoDoChamado = new string[1000];
@@ -29,6 +31,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
             int[] diasEmAberto = new int[1000];
             int registrosChamado = 0;
             #endregion
+
             #region Solicitantes
             string[] nomeDoSolicitante = new string[1000];
             string[] emailDoSolicitante = new string[1000];
@@ -36,6 +39,15 @@ namespace GestaoDeEquipamentos.ConsoleApp
             string[] solicitanteAtreladoAoChamado = new string[1000];
             int[] idDosSolicitantes = new int[1000];
             int solicitantes = 0;
+            #endregion
+
+            #region Chamados fechados
+            string[] tituloDoChamadoFechado = new string[1000];
+            string[] descricaoDoChamadoFechado = new string[1000];
+            string[] equipamentoAtreladoAoChamadoFechado = new string[1000];
+            string[] solicitanteAtreladoAoChamadoFechado = new string[1000];
+            int[] idDosChamadosFechado = new int[1000];
+            int registrosChamadoFechado = 0;
             #endregion
 
             #endregion
@@ -102,7 +114,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
                             Console.Clear();
                             Console.WriteLine("Menu > Chamados:\n");
                             Console.WriteLine("Qual opção deseja no menu de chamados?\n");
-                            Console.Write("1. Registrar chamado\n2. Visualizar chamados\n3. Editar chamado\n4. Excluir chamado\n5. Voltar\n> ");
+                            Console.Write("1. Registrar chamado\n2. Visualizar chamados\n3. Editar chamado\n4. Excluir chamado\n5. Fechar chamado\n6. Voltar\n> ");
                             int escolhaMenuChamados = int.Parse(Console.ReadLine());
                             switch (escolhaMenuChamados)
                             {
@@ -117,7 +129,34 @@ namespace GestaoDeEquipamentos.ConsoleApp
                                     {
                                         Console.Clear();
                                         Console.WriteLine("Menu > Chamados > Visualizar:\n");
-                                        VisualizarChamados(tituloDoChamado, dataAberturaChamado, equipamentoAtreladoAoChamado, registrosChamado, idDosChamados, solicitanteAtreladoAoChamado);
+                                        Console.WriteLine("Qual opção deseja no menu de visualização dechamados?\n");
+                                        Console.Write("1. Chamados abertos\n2. Chamados fechados\n3. Voltar\n> ");
+                                        int escolhaMenuVisualizar = int.Parse(Console.ReadLine());
+                                        switch (escolhaMenuVisualizar)
+                                        {
+                                            case 1:
+                                                {
+                                                    Console.Clear();
+                                                    Console.WriteLine("Menu > Chamados > Visualizar > Abertos:\n");
+                                                    VisualizarChamados(tituloDoChamado, dataAberturaChamado, equipamentoAtreladoAoChamado, registrosChamado, idDosChamados, solicitanteAtreladoAoChamado);
+                                                    break;
+                                                }
+                                            case 2:
+                                                {
+                                                    Console.Clear();
+                                                    Console.WriteLine("Menu > Chamados > Visualizar > Fechados:\n");
+                                                    VisualizarChamadosFechados(tituloDoChamadoFechado, descricaoDoChamadoFechado, equipamentoAtreladoAoChamadoFechado, idDosChamadosFechado, ref registrosChamadoFechado, solicitanteAtreladoAoChamadoFechado);
+                                                    break;
+                                                }
+                                            case 3:
+                                                {
+                                                    Console.Clear();
+                                                    break;
+                                                }
+                                            default:
+                                                Console.WriteLine("Opção inválida!");
+                                                break;
+                                        }
                                         break;
                                     }
                                 case 3:
@@ -137,6 +176,13 @@ namespace GestaoDeEquipamentos.ConsoleApp
                                         break;
                                     }
                                 case 5:
+                                    {
+                                        Console.Clear();
+                                        Console.WriteLine("Menu > Chamados > Fechar:\n");
+                                        FecharChamados(tituloDoChamado, descricaoDoChamado, dataAberturaChamado, equipamentoAtreladoAoChamado, nomeDoEquipamento, ref registrosChamado, ref registros, idDosEquipamentos, numeroDeSerieDoEquipamento, fabricanteDoEquipamento, idDosChamados, solicitanteAtreladoAoChamado, tituloDoChamadoFechado, descricaoDoChamadoFechado, equipamentoAtreladoAoChamadoFechado, idDosChamadosFechado, ref registrosChamadoFechado, solicitanteAtreladoAoChamadoFechado);
+                                        break;
+                                    }
+                                case 6:
                                     {
                                         Console.Clear();
                                         break;
@@ -206,6 +252,8 @@ namespace GestaoDeEquipamentos.ConsoleApp
                 }
             }
         } // Fecha main
+
+
         #region Métodos - Geral
 
         #region Métodos dos equipamentos
@@ -571,6 +619,37 @@ namespace GestaoDeEquipamentos.ConsoleApp
                 MensagemInformativa("Chamado atualizado com sucesso!", ConsoleColor.Cyan);
             }
         }
+        static void FecharChamados(string[] tituloDoChamado, string[] descricaoDoChamado, string[] dataAberturaChamado, string[] equipamentoAtreladoAoChamado, string[] nomeDoEquipamento, ref int registrosChamado, ref int registros, int[] idDosEquipamentos, string[] numeroDeSerieDoEquipamento, string[] fabricanteDoEquipamento, int[] idDosChamados, string[] solicitanteAtreladoAoChamado, string[] tituloDoChamadoFechado, string[] descricaoDoChamadoFechado, string[] equipamentoAtreladoAoChamadoFechado, int[] idDosChamadosFechado, ref int registrosChamadoFechado, string[] solicitanteAtreladoAoChamadoFechado)
+        {
+            if (registrosChamado == 0)
+            {
+                Console.WriteLine("Ainda não há chamados em aberto! :(\n");
+            }
+            else
+            {
+                Console.WriteLine("Chamados em aberto: ");
+                VisualizarChamados(tituloDoChamado, dataAberturaChamado, equipamentoAtreladoAoChamado, registrosChamado, idDosChamados, solicitanteAtreladoAoChamado);
+                Console.Write("Escolha o número do 'ID' do chamado para fechar: ");
+                int idParaFechar = int.Parse(Console.ReadLine());
+                for (int i = 0; i < registrosChamado; i++)
+                {
+                    if (tituloDoChamadoFechado[i] == null)
+                    {  // Se o título do chamado fechado (0, 1, 2, 3, 4, 5... conter algo, passa, senão, escreve aqui
+                        tituloDoChamadoFechado[i] = tituloDoChamado[idParaFechar];
+                        solicitanteAtreladoAoChamadoFechado[i] = solicitanteAtreladoAoChamado[idParaFechar];
+                        descricaoDoChamadoFechado[i] = descricaoDoChamado[idParaFechar];
+                        equipamentoAtreladoAoChamadoFechado[i] = equipamentoAtreladoAoChamado[idParaFechar];
+                        idDosChamadosFechado[i] = i;
+                        registrosChamadoFechado += 1;
+                        Console.WriteLine("Copiei chamado fechado");
+                    }
+                }
+                //registrosChamado -= 1; // Tirar aqui ou depois???
+                //Console.Clear();
+                Console.WriteLine("Aqui ele clonou as informações da posição " + idParaFechar + " para o array de chamados fechados e continuou");
+                MensagemInformativa("Chamado fechado com sucesso!", ConsoleColor.DarkRed);
+            }
+        }
         static void ExcluirChamado(string[] tituloDoChamado, string[] descricaoDoChamado, string[] dataAberturaChamado, string[] equipamentoAtreladoAoChamado, string[] nomeDoEquipamento, ref int registrosChamado, ref int registros, int[] idDosEquipamentos, string[] numeroDeSerieDoEquipamento, string[] fabricanteDoEquipamento, int[] idDosChamados, string[] solicitanteAtreladoAoChamado)
         {
             if (registrosChamado == 0)
@@ -593,6 +672,29 @@ namespace GestaoDeEquipamentos.ConsoleApp
                 registrosChamado -= 1;
                 Console.Clear();
                 MensagemInformativa("Chamado excluído com sucesso!", ConsoleColor.DarkRed);
+            }
+        }
+        static void VisualizarChamadosFechados(string[] tituloDoChamadoFechado, string[] descricaoDoChamadoFechado, string[] equipamentoAtreladoAoChamadoFechado, int[] idDosChamadosFechado, ref int registrosChamadoFechado, string[] solicitanteAtreladoAoChamadoFechado)
+        {
+            if (registrosChamadoFechado == 0)
+            {
+                Console.WriteLine("Ainda não há chamados fechados! :(\n");
+            }
+            else
+            {
+                for (int i = 0; i < registrosChamadoFechado; i++)
+                {
+                    if (tituloDoChamadoFechado[i] != "") // Se estiver com algo, existe um chamado nessa posição, caso contrário, não
+                    {
+                        Console.WriteLine("\nID do chamado.......: " + idDosChamadosFechado[i]);
+                        Console.Write("Solicitante.........: ");
+                        Console.WriteLine(solicitanteAtreladoAoChamadoFechado[i]);
+                        Console.Write("Equipamento atrelado: ");
+                        Console.WriteLine(equipamentoAtreladoAoChamadoFechado[i]);
+                        Console.Write("Título do chamado...: ");
+                        Console.WriteLine(tituloDoChamadoFechado[i]);
+                    }
+                }
             }
         }
         #endregion
@@ -626,7 +728,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
         }
         static void VisualizarSolicitantes(string[] nomeDoSolicitante, string[] emailDoSolicitante, string[] telefoneDoSolicitante, string[] solicitanteAtreladoAoChamado, int[] idDosSolicitantes, ref int solicitantes)
         {
-            if(solicitantes == 0)
+            if (solicitantes == 0)
             {
                 Console.WriteLine("\nAinda não há solicitantes registrados! :(\n");
             }
@@ -734,18 +836,18 @@ namespace GestaoDeEquipamentos.ConsoleApp
                     Console.WriteLine();
                     MensagemInformativa("Desculpe! Não posso excluir esse solicitante pois ele está atrelado a um chamado", ConsoleColor.DarkRed);
                 }
-                if (podeExcluir == true) 
-                { 
+                if (podeExcluir == true)
+                {
                     for (int i = idSolicitanteParaExcluir; i < solicitantes; i++)
                     {
-                    nomeDoSolicitante[i] = nomeDoSolicitante[i + 1];
-                    emailDoSolicitante[i] = emailDoSolicitante[i + 1];
-                    telefoneDoSolicitante[i] = telefoneDoSolicitante[i + 1];
+                        nomeDoSolicitante[i] = nomeDoSolicitante[i + 1];
+                        emailDoSolicitante[i] = emailDoSolicitante[i + 1];
+                        telefoneDoSolicitante[i] = telefoneDoSolicitante[i + 1];
                     }
                     solicitantes -= 1;
                     Console.Clear();
                     MensagemInformativa("Solicitante excluído com sucesso!", ConsoleColor.DarkRed);
-                }  
+                }
             }
         }
         #endregion
