@@ -1,6 +1,6 @@
 ﻿/*
  * Por fazer:
- * Requisitos 2.4 e 3.1
+ * Requisito 3.1
  */
 using System;
 
@@ -499,7 +499,6 @@ namespace GestaoDeEquipamentos.ConsoleApp
                 Console.Write("E através do ID, indique o solicitante atrelado ao chamado: ");
                 int idSolicitanteEscolhido = int.Parse(Console.ReadLine());
                 solicitanteAtreladoAoChamado[registrosChamado] = nomeDoSolicitante[idSolicitanteEscolhido];
-                Console.ReadKey();
                 registrosChamado += 1; // Registro criado
                 Console.Clear();
             }
@@ -631,7 +630,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
                 VisualizarChamados(tituloDoChamado, dataAberturaChamado, equipamentoAtreladoAoChamado, registrosChamado, idDosChamados, solicitanteAtreladoAoChamado);
                 Console.Write("Escolha o número do 'ID' do chamado para fechar: ");
                 int idParaFechar = int.Parse(Console.ReadLine());
-                for (int i = 0; i < registrosChamado; i++)
+                for (int i = 0; i < registrosChamado; i++) // Rodará quantas vezes tiver registros
                 {
                     if (tituloDoChamadoFechado[i] == null)
                     {  // Se o título do chamado fechado (0, 1, 2, 3, 4, 5... conter algo, passa, senão, escreve aqui
@@ -642,12 +641,21 @@ namespace GestaoDeEquipamentos.ConsoleApp
                         idDosChamadosFechado[i] = i;
                         registrosChamadoFechado += 1;
                         Console.WriteLine("Copiei chamado fechado");
+                        break; // Se encontrar espaço vazio (Lista preenchida + 1) escreve e sai fora do FOR
                     }
                 }
-                //registrosChamado -= 1; // Tirar aqui ou depois???
-                //Console.Clear();
+                int reescreverChamadosAbertos = registrosChamado - registrosChamadoFechado;
+                for (int i = idParaFechar; i < reescreverChamadosAbertos+1; i++)
+                {
+                    tituloDoChamado[i] = tituloDoChamado[i + 1];
+                    descricaoDoChamado[i] = descricaoDoChamado[i + 1];
+                    dataAberturaChamado[i] = dataAberturaChamado[i + 1];
+                    equipamentoAtreladoAoChamado[i] = equipamentoAtreladoAoChamado[i + 1];
+                }
+                registrosChamado -= 1;
                 Console.WriteLine("Aqui ele clonou as informações da posição " + idParaFechar + " para o array de chamados fechados e continuou");
                 MensagemInformativa("Chamado fechado com sucesso!", ConsoleColor.DarkRed);
+                Console.WriteLine("Agora já deve ter retirado do arr abertos");
             }
         }
         static void ExcluirChamado(string[] tituloDoChamado, string[] descricaoDoChamado, string[] dataAberturaChamado, string[] equipamentoAtreladoAoChamado, string[] nomeDoEquipamento, ref int registrosChamado, ref int registros, int[] idDosEquipamentos, string[] numeroDeSerieDoEquipamento, string[] fabricanteDoEquipamento, int[] idDosChamados, string[] solicitanteAtreladoAoChamado)
