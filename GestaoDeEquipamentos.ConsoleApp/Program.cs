@@ -246,6 +246,11 @@ namespace GestaoDeEquipamentos.ConsoleApp
                             menu = false;
                             break;
                         }
+                    case 5:
+                        {
+                            EquipamentosProblematicos(equipamentoAtreladoAoChamado, ref registrosChamado);
+                            break;
+                        }
                     default:
                         Console.WriteLine("Opção inválida!");
                         break;
@@ -645,7 +650,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
                     }
                 }
                 int reescreverChamadosAbertos = registrosChamado - registrosChamadoFechado;
-                for (int i = idParaFechar; i < reescreverChamadosAbertos+1; i++)
+                for (int i = idParaFechar; i < reescreverChamadosAbertos + 1; i++)
                 {
                     tituloDoChamado[i] = tituloDoChamado[i + 1];
                     descricaoDoChamado[i] = descricaoDoChamado[i + 1];
@@ -704,6 +709,52 @@ namespace GestaoDeEquipamentos.ConsoleApp
                     }
                 }
             }
+        }
+
+        static void EquipamentosProblematicos(string[] equipamentoAtreladoAoChamado, ref int registrosChamado)
+        {
+            string[] arrAux = new string[1000]; // Cópia do array de equipamentos, para não alterá-lo
+            for (int i = 0; i < registrosChamado; i++)
+            {
+                arrAux[i] = equipamentoAtreladoAoChamado[i];
+            }
+            Array.Sort(arrAux);
+            int[] quantia = new int[1000];
+            string[] nome = new string[1000];
+            for (int i = 0; i < 1000; i++)
+            {
+                
+            }
+            //Console.WriteLine("Normal: ");
+            //for (int i = 0; i < arrAux.Length; i++)
+            //{
+            //    if (arrAux[i] != null)
+            //    {
+            //        Console.WriteLine(arrAux[i]);
+            //    }
+            //}
+            //Console.WriteLine("Normal do foreach:");
+
+
+            //Array.Sort(arrAux);
+            //Console.WriteLine("Ordenado: ");
+            //for (int i = 0; i < arrAux.Length; i++)
+            //{
+            //    if (arrAux[i] != null)
+            //    {
+            //        Console.WriteLine(arrAux[i]);
+            //    }
+            //}
+            //Console.WriteLine("Ordenado-reverso: ");
+            //Array.Reverse(arrAux);
+
+            //for (int i = 0; i < arrAux.Length; i++)
+            //{
+            //    if (arrAux[i] != null)
+            //    {
+            //        Console.WriteLine(arrAux[i]);
+            //    }
+            //}
         }
         #endregion
 
