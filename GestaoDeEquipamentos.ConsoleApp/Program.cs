@@ -713,18 +713,63 @@ namespace GestaoDeEquipamentos.ConsoleApp
 
         static void EquipamentosProblematicos(string[] equipamentoAtreladoAoChamado, ref int registrosChamado)
         {
+            int contador = 0;
             string[] arrAux = new string[1000]; // Cópia do array de equipamentos, para não alterá-lo
             for (int i = 0; i < registrosChamado; i++)
             {
                 arrAux[i] = equipamentoAtreladoAoChamado[i];
             }
             Array.Sort(arrAux);
+            Array.Reverse(arrAux);
+            for (int x = 0; x < registrosChamado; x++)
+            {
+                if(arrAux[x] != arrAux[x + 1] && arrAux[x] != null)
+                {
+                    contador++;
+                }
+            }
             int[] quantia = new int[1000];
             string[] nome = new string[1000];
-            for (int i = 0; i < 1000; i++)
+            string verificadora = "";
+            string queSeraVerificada = "";
+            int posicao = 0;
+            for (int i = 0; i <= contador; i++)
             {
-                
+                verificadora = arrAux[i];
+                for (int z = 0; z < registrosChamado; z++)
+                {
+                    if(z == 0) { 
+                        z = i;
+                    }
+                    queSeraVerificada = arrAux[z];
+                    if(verificadora == queSeraVerificada)
+                    {
+                        quantia[posicao]++;
+                        nome[posicao] = verificadora;
+                    }
+                    else
+                    {
+                        i = (z-1);
+                        break;
+                    }
+                }
+                posicao++;
             }
+            Console.WriteLine("Terminou o processo de teste");
+            Array.Sort(quantia, nome);
+            Array.Reverse(quantia);
+            Array.Reverse(nome);
+            for (int i = 0; i < registrosChamado; i++)
+            {
+                if(quantia[i] != 0)
+                {
+                    Console.Write("O item " + nome[i] + " teve " + quantia[i] + " chamados!\n");
+                }
+            }
+            //for (int i = 0; i < 1000; i++)
+            //{
+
+            //}
             //Console.WriteLine("Normal: ");
             //for (int i = 0; i < arrAux.Length; i++)
             //{
@@ -733,8 +778,6 @@ namespace GestaoDeEquipamentos.ConsoleApp
             //        Console.WriteLine(arrAux[i]);
             //    }
             //}
-            //Console.WriteLine("Normal do foreach:");
-
 
             //Array.Sort(arrAux);
             //Console.WriteLine("Ordenado: ");
