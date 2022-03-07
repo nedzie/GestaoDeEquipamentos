@@ -64,7 +64,7 @@ namespace GestaoDeEquipamentos.ConsoleApp
                             Console.Clear();
                             Console.WriteLine("Menu > Equipamentos:\n");
                             Console.WriteLine("Qual opção deseja no menu de equipamentos?\n");
-                            Console.Write("1. Registrar equipamentos\n2. Visualizar equipamentos\n3. Editar equipamento\n4. Excluir equipamento\n5. Voltar\n> ");
+                            Console.Write("1. Registrar equipamentos\n2. Visualizar equipamentos\n3. Editar equipamento\n4. Excluir equipamento\n5. Equipamentos com mais chamados\n6. Sair\n> ");
                             int escolhaMenuEquipamentos = int.Parse(Console.ReadLine());
                             switch (escolhaMenuEquipamentos)
                             {
@@ -98,6 +98,11 @@ namespace GestaoDeEquipamentos.ConsoleApp
                                         break;
                                     }
                                 case 5:
+                                    {
+                                        EquipamentosProblematicos(equipamentoAtreladoAoChamado, ref registrosChamado);
+                                        break;
+                                    }
+                                case 6:
                                     {
                                         Console.Clear();
                                         break;
@@ -244,11 +249,6 @@ namespace GestaoDeEquipamentos.ConsoleApp
                             Console.Clear();
                             Console.WriteLine("Obrigado! :)");
                             menu = false;
-                            break;
-                        }
-                    case 5:
-                        {
-                            EquipamentosProblematicos(equipamentoAtreladoAoChamado, ref registrosChamado);
                             break;
                         }
                     default:
@@ -755,7 +755,6 @@ namespace GestaoDeEquipamentos.ConsoleApp
                 }
                 posicao++;
             }
-            Console.WriteLine("Terminou o processo de teste");
             Array.Sort(quantia, nome);
             Array.Reverse(quantia);
             Array.Reverse(nome);
@@ -766,38 +765,6 @@ namespace GestaoDeEquipamentos.ConsoleApp
                     Console.Write("O item " + nome[i] + " teve " + quantia[i] + " chamados!\n");
                 }
             }
-            //for (int i = 0; i < 1000; i++)
-            //{
-
-            //}
-            //Console.WriteLine("Normal: ");
-            //for (int i = 0; i < arrAux.Length; i++)
-            //{
-            //    if (arrAux[i] != null)
-            //    {
-            //        Console.WriteLine(arrAux[i]);
-            //    }
-            //}
-
-            //Array.Sort(arrAux);
-            //Console.WriteLine("Ordenado: ");
-            //for (int i = 0; i < arrAux.Length; i++)
-            //{
-            //    if (arrAux[i] != null)
-            //    {
-            //        Console.WriteLine(arrAux[i]);
-            //    }
-            //}
-            //Console.WriteLine("Ordenado-reverso: ");
-            //Array.Reverse(arrAux);
-
-            //for (int i = 0; i < arrAux.Length; i++)
-            //{
-            //    if (arrAux[i] != null)
-            //    {
-            //        Console.WriteLine(arrAux[i]);
-            //    }
-            //}
         }
         #endregion
 
