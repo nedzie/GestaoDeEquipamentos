@@ -1,8 +1,4 @@
-﻿/*
- * Por fazer:
- * Requisito 3.1
- */
-using System;
+﻿using System;
 
 namespace GestaoDeEquipamentos.ConsoleApp
 {
